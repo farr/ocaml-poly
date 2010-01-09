@@ -28,3 +28,8 @@ val deriv : poly -> poly
 
 (** [eval poly x] evaluates [poly] at the point [x]. *)
 val eval : poly -> float -> float
+
+(** [from_roots roots] produces a polynomial that (up to roundoff
+    error, which can be {b significant} for some unfortunate
+    polynomials) has the given (real) roots. *)
+val from_roots : float array -> poly

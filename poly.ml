@@ -64,3 +64,10 @@ let eval p x =
 
 let make (p : poly) = Array.copy p
 let coeffs (p : poly) = Array.copy p
+
+let from_roots roots = 
+  Array.fold_left
+    (fun p root -> 
+       mul p [| ~-.root; 1.0|])
+    [|1.0|]
+    roots

@@ -34,8 +34,21 @@ let test_deriv () =
       assert_equal ~cmp:(cmp_float ~epsabs:1e-3 ~epsrel:1e-3) ~printer:string_of_float d d_num
   done
 
+let test_from_roots () = 
+  for i = 1 to 100 do 
+    let nr = 1 + (Random.int 5) in 
+    let roots = Array.init nr (fun _ -> Random.float 1.0 -. 0.5) in 
+    let p = from_roots roots in 
+      for i = 0 to nr - 1 do 
+        let r = roots.(i) in 
+        let zero = eval p r in 
+          assert_equal_float 0.0 zero
+      done
+  done
+
 let tests = "poly.ml tests" >:::
   ["randomized add test" >:: (fun () -> randomized_test_binary_op (+.) add);
    "randomize sub test" >:: (fun () -> randomized_test_binary_op (-.) sub);
    "randomize mul test" >:: (fun () -> randomized_test_binary_op ( *. ) mul);
-   "deriv test" >:: test_deriv]
+   "deriv test" >:: test_deriv;
+   "from_roots test" >:: test_from_roots]
