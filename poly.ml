@@ -1,0 +1,66 @@
+type poly = float array
+
+let order (p : poly) = Array.length p - 1
+
+let add p1 p2 = 
+  let n1 = Array.length p1 and 
+      n2 = Array.length p2 in 
+  let n = max n1 n2 in 
+  let res = Array.make n 0.0 in 
+    for i = 0 to (min n1 n2) - 1 do 
+      res.(i) <- p1.(i) +. p2.(i)
+    done;
+    let maxp = if n1 > n2 then p1 else p2 in 
+      for i = (min n1 n2) to n - 1 do 
+        res.(i) <- maxp.(i)
+      done;
+      res
+
+let sub p1 p2 = 
+  let n1 = Array.length p1 and 
+      n2 = Array.length p2 in 
+  let n = max n1 n2 in 
+  let res = Array.make n 0.0 in 
+    for i = 0 to (min n1 n2) - 1 do 
+      res.(i) <- p1.(i) -. p2.(i)
+    done;
+    let maxp = if n1 > n2 then p1 else p2 and 
+        sign = if n1 > n2 then 1.0 else -1.0 in 
+      for i = (min n1 n2) to n - 1 do 
+        res.(i) <- sign*.maxp.(i)
+      done;
+      res
+
+let mul p1 p2 = 
+  let n1 = Array.length p1 and 
+      n2 = Array.length p2 in 
+  let n = n1 + n2 in 
+  let res = Array.make n 0.0 in 
+    for i = 0 to n1 - 1 do 
+      for j = 0 to n2 - 1 do 
+        res.(i+j) <- res.(i+j) +. p1.(i)*.p2.(j)
+      done
+    done;
+    res
+
+let deriv p = 
+  let n = Array.length p in 
+    if n = 1 then 
+      Array.make 1 0.0
+    else
+      let res = Array.make (n-1) 0.0 in 
+        for i = 1 to n - 1 do 
+          res.(i-1) <- (float_of_int i)*.p.(i)
+        done;
+        res
+
+let eval p x = 
+  let n = Array.length p in 
+  let res = ref p.(n-1) in 
+    for i = n - 2 downto 0 do 
+      res := !res*.x +. p.(i)
+    done;
+    !res
+
+let make (p : poly) = Array.copy p
+let coeffs (p : poly) = Array.copy p
